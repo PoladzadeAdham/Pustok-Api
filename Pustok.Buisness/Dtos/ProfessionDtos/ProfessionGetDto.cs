@@ -1,0 +1,8 @@
+﻿namespace Pustok.Buisness.Dtos.ProfessionDtos
+{
+    public class ProfessionGetDto
+    {
+        public Guid Id { get; set; }
+        public string Name { get; set; } = string.Empty;
+    }
+}
