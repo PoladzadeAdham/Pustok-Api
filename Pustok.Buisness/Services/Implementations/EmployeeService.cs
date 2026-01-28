@@ -11,18 +11,25 @@ namespace Pustok.Buisness.Services.Implementations
     internal class EmployeeService : IEmployeeService
     {
         private readonly IEmployeeRepository _repository;
+        private readonly IProfessionRepository _professionRepository;
         private readonly IMapper _mapper;
         private readonly ICloudinaryService _cloudinaryService;
 
-        public EmployeeService(IEmployeeRepository repository, IMapper mapper, ICloudinaryService cloudinaryService)
+        public EmployeeService(IEmployeeRepository repository, IMapper mapper, ICloudinaryService cloudinaryService, IProfessionRepository professionRepository)
         {
             _repository = repository;
             _mapper = mapper;
             _cloudinaryService = cloudinaryService;
+            _professionRepository = professionRepository;
         }
 
-        public async Task CreateAsync(EmployeeCreateDto dto)
+        public async Task<ResultDto> CreateAsync(EmployeeCreateDto dto)
         {
+            var isExistProfession = await _professionRepository.AnyAsync(x => x.Id == dto.ProfessionId);
+
+            if (!isExistProfession)
+                throw new NotFoundException("Doesn't find profession id");
+
             var employee = _mapper.Map<Employee>(dto);
 
             var imagePath = await _cloudinaryService.FileUploadAsync(dto.Image);
@@ -30,9 +37,11 @@ namespace Pustok.Buisness.Services.Implementations
 
             await _repository.AddAsync(employee);
             await _repository.SaveChangeAsync();
+
+            return new ResultDto();
         }
 
-        public async Task DeleteAsync(Guid id)
+        public async Task<ResultDto> DeleteAsync(Guid id)
         {
             var employee = await _repository.GetByIdAsync(id);
 
@@ -43,19 +52,24 @@ namespace Pustok.Buisness.Services.Implementations
 
             _repository.Delete(employee);
             await _repository.SaveChangeAsync();
+
+            return new ResultDto();
         }
 
-        public async Task<List<EmployeeGetDto>> GetAllAsync()
+        public async Task<ResultDto<List<EmployeeGetDto>>> GetAllAsync()
         {
             var employees = await _repository.GetAll().Include(x=>x.Profession).ToListAsync();
 
             var dtos = _mapper.Map<List<EmployeeGetDto>>(employees);
 
-            return dtos;
+            return new()
+            {
+                Data = dtos,
+            };
 
         }
 
-        public async Task<EmployeeGetDto?> GetByIdAsync(Guid id)
+        public async Task<ResultDto<EmployeeGetDto?>> GetByIdAsync(Guid id)
         {
             var employee = await _repository.GetByIdAsync(id);
             
@@ -63,11 +77,14 @@ namespace Pustok.Buisness.Services.Implementations
                 throw new NotFoundException();
 
             var dto = _mapper.Map<EmployeeGetDto>(employee);
-            return dto;
+            return new()
+            {
+                Data = dto,
+            };
 
         }
 
-        public async Task UpdateAsync(EmployeeUpdateDto dto)
+        public async Task<ResultDto> UpdateAsync(EmployeeUpdateDto dto)
         {
             var existItem = await _repository.GetByIdAsync(dto.Id);
 
@@ -88,6 +105,7 @@ namespace Pustok.Buisness.Services.Implementations
             _repository.Update(existItem);
             await _repository.SaveChangeAsync();
 
+            return new();
         }
     }
 }
