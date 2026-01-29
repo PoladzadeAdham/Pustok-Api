@@ -1,22 +1,26 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Pustok.Core.Entities;
+using Pustok.Core.Entities.Common;
+using Pustok.DataAccess.Interceptors;
 using System.Reflection;
 
 namespace Pustok.DataAccess.Context
 {
-    public class AppDbContext : DbContext
+    public class AppDbContext(BaseAuditableInterceptor _interceptor, DbContextOptions options) : DbContext(options)
     {
-        public AppDbContext(DbContextOptions options) : base(options)
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
+            optionsBuilder.AddInterceptors(_interceptor);
+
+            base.OnConfiguring(optionsBuilder);
         }
 
-        protected AppDbContext()
-        {
-        }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.ApplyConfigurationsFromAssembly(typeof(AppDbContext).Assembly);
+
+            modelBuilder.Entity<Employee>().HasQueryFilter(x => !x.IsDeleted);
             base.OnModelCreating(modelBuilder);
         }
 

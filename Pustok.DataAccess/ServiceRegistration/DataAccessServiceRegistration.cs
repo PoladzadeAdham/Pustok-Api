@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Pustok.DataAccess.Context;
+using Pustok.DataAccess.Interceptors;
 using Pustok.DataAccess.Repositories.Abstractions;
 using Pustok.DataAccess.Repositories.Implementations;
 
@@ -13,6 +14,7 @@ namespace Pustok.DataAccess.ServiceRegistration
         {
             services.AddScoped<IEmployeeRepository, EmployeeRepository>();
             services.AddScoped<IProfessionRepository, ProfessionRepository>();
+            services.AddScoped<BaseAuditableInterceptor>();
 
             services.AddDbContext<AppDbContext>(option =>
             {

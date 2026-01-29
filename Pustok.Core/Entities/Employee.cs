@@ -2,7 +2,7 @@
 
 namespace Pustok.Core.Entities
 {
-    public class Employee : BaseEntity
+    public class Employee : BaseAuditableEntity
     {
         public string FullName { get; set; } = string.Empty;
         public decimal Salary { get; set; }
