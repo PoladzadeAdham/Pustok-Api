@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Pustok.DataAccess.Context;
 
@@ -11,9 +12,11 @@ using Pustok.DataAccess.Context;
 namespace Pustok.DataAccess.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260201174848_AddSeedDatas")]
+    partial class AddSeedDatas
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -295,33 +298,6 @@ namespace Pustok.DataAccess.Migrations
                         {
                             Id = new Guid("99b14a9d-6c81-4790-aa19-f9085ba4c2b5"),
                             Name = "Default profession"
-                        });
-                });
-
-            modelBuilder.Entity("Pustok.Core.Entities.Status", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Status");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = new Guid("b2fcf88f-3b0e-479d-b642-b49b572341e6"),
-                            Name = "Pending"
-                        },
-                        new
-                        {
-                            Id = new Guid("2a23ac2f-f69e-4318-a861-a74aa724f054"),
-                            Name = "Done"
                         });
                 });
 

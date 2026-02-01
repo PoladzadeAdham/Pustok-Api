@@ -1,12 +1,14 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using Pustok.Core.Entities;
 using Pustok.Core.Entities.Common;
+using Pustok.DataAccess.DataInitializer;
 using Pustok.DataAccess.Interceptors;
 using System.Reflection;
 
 namespace Pustok.DataAccess.Context
 {
-    public class AppDbContext(BaseAuditableInterceptor _interceptor, DbContextOptions options) : DbContext(options)
+    public class AppDbContext(BaseAuditableInterceptor _interceptor, DbContextOptions options) : IdentityDbContext<AppUser, AppRole, string>(options)
     {
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -21,6 +23,9 @@ namespace Pustok.DataAccess.Context
             modelBuilder.ApplyConfigurationsFromAssembly(typeof(AppDbContext).Assembly);
 
             modelBuilder.Entity<Employee>().HasQueryFilter(x => !x.IsDeleted);
+
+            modelBuilder.AddSeedDatas();
+
             base.OnModelCreating(modelBuilder);
         }
 

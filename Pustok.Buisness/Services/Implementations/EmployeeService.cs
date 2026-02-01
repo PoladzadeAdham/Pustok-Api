@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
 using Pustok.Buisness.Exceptions;
 using Pustok.Buisness.Services.Abstractions;
@@ -107,5 +108,18 @@ namespace Pustok.Buisness.Services.Implementations
 
             return new();
         }
+
+
+        //public async Task CreateOrder()
+        //{
+        //    //Order order = new(){ StatusId = SeedData.PendingStatus.Id};
+        //}
+        
+        //public async Task DoneOrder()
+        //{
+        //    //existOrder.StatusId = SeedData.DoneStatus.Id
+        //}
+
+
     }
 }
