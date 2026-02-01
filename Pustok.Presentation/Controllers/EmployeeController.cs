@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Pustok.Buisness.Dtos;
 using Pustok.Buisness.Services.Abstractions;
@@ -7,6 +7,7 @@ namespace Pustok.Presentation.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize(Roles = "Member")]
     public class EmployeeController(IEmployeeService _employeeService) : ControllerBase
     {
         [HttpGet]

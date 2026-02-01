@@ -7,3 +7,4 @@ namespace Pustok.Buisness.Exceptions
         public int StatusCode { get; set; } = 404;
     }
 }
+

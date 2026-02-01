@@ -13,7 +13,6 @@
             IsSucced = true;
         }
 
-
         public ResultDto(string message)
         {
             Message = message;
@@ -38,6 +37,17 @@
     public class ResultDto<T> : ResultDto
     {
         public T? Data { get; set; }
+
+        public ResultDto(T data)  : base()
+        {
+            Data = data;
+        }
+
+        public ResultDto() : base()
+        {
+            
+        }
+
     }
 
 }
